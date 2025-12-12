@@ -48,6 +48,15 @@ export function StoryPicker({ onSelect, selectedId }: StoryPickerProps) {
 
   return (
     <div className="story-picker">
+      <div className="story-picker__header">
+        <div>
+          <h2 className="story-picker__title">Select a Story to Register</h2>
+          <p className="story-picker__description">
+            Choose from your completed stories ready for on-chain registration
+          </p>
+        </div>
+      </div>
+
       <div className="story-picker__filters">
         <Input
           placeholder="Search stories..."
@@ -67,7 +76,7 @@ export function StoryPicker({ onSelect, selectedId }: StoryPickerProps) {
         {data?.items.length === 0 ? (
           <EmptyState
             title="No stories found"
-            description="Create a new story or adjust your filters."
+            description="Create a new story or adjust your filters to find stories ready for registration."
           />
         ) : (
           data?.items.map(story => (
@@ -79,12 +88,29 @@ export function StoryPicker({ onSelect, selectedId }: StoryPickerProps) {
               <CardBody>
                 <div className="story-picker__item-header">
                   <h3 className="story-picker__item-title">{story.title}</h3>
-                  <Badge variant={getStatusVariant(story.status)}>{story.status}</Badge>
+                  <Badge variant={getStatusVariant(story.status)}>
+                    {story.status.replace('_', ' ').toUpperCase()}
+                  </Badge>
                 </div>
-                <p className="story-picker__item-summary">{story.summary}</p>
+                {story.summary && (
+                  <p className="story-picker__item-summary">{story.summary}</p>
+                )}
                 <div className="story-picker__item-meta">
-                  <span>{story.contributors.length} contributors</span>
-                  <span>Updated {new Date(story.updatedAt).toLocaleDateString()}</span>
+                  <span className="story-picker__item-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="9" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {story.contributors.length} {story.contributors.length === 1 ? 'contributor' : 'contributors'}
+                  </span>
+                  <span className="story-picker__item-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Updated {new Date(story.updatedAt).toLocaleDateString()}
+                  </span>
                 </div>
               </CardBody>
             </Card>

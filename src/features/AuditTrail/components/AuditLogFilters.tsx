@@ -29,6 +29,8 @@ export function AuditLogFilters({ filters, onChange, onExport }: AuditLogFilters
     });
   };
 
+  const hasFilters = filters.eventType || filters.startDate || filters.endDate;
+
   return (
     <div className="audit-log-filters">
       <div className="audit-log-filters__fields">
@@ -55,15 +57,12 @@ export function AuditLogFilters({ filters, onChange, onExport }: AuditLogFilters
       </div>
 
       <div className="audit-log-filters__actions">
-        <Button
-          variant="outline"
-          onClick={() => onChange({})}
-        >
-          Clear Filters
-        </Button>
-        {onExport && (
-          <Button variant="secondary" onClick={onExport}>
-            Export CSV
+        {hasFilters && (
+          <Button
+            variant="ghost"
+            onClick={() => onChange({})}
+          >
+            Clear All
           </Button>
         )}
       </div>

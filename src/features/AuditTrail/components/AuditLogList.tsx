@@ -27,8 +27,12 @@ export function AuditLogList({ logs, isLoading, onSelect }: AuditLogListProps) {
 
   return (
     <ul className="audit-log-list">
-      {logs.map(log => (
+      {logs.map((log, index) => (
         <li key={log.id} className="audit-log-list__item">
+          <div className="audit-log-list__timeline">
+            {index < logs.length - 1 && <div className="audit-log-list__timeline-line" />}
+            <div className="audit-log-list__timeline-dot" />
+          </div>
           <button
             type="button"
             className="audit-log-list__button"
@@ -39,7 +43,17 @@ export function AuditLogList({ logs, isLoading, onSelect }: AuditLogListProps) {
                 {formatEventType(log.eventType)}
               </Badge>
               <time className="audit-log-list__time" dateTime={log.timestamp}>
-                {new Date(log.timestamp).toLocaleString()}
+                {new Date(log.timestamp).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+                {' • '}
+                {new Date(log.timestamp).toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                })}
               </time>
             </div>
             <div className="audit-log-list__content">
