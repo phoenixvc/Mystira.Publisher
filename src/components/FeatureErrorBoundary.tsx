@@ -1,9 +1,10 @@
 import { Component, type ReactNode } from 'react';
-import { Alert } from './Alert';
-import { Button } from './Button';
+import { Alert, Button } from './index';
+import { logger } from '@/utils/logger';
 
-interface Props {
+interface FeatureErrorBoundaryProps {
   children: ReactNode;
+  featureName: string;
   fallback?: ReactNode;
 }
 
@@ -12,8 +13,8 @@ interface State {
   error?: Error;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export class FeatureErrorBoundary extends Component<FeatureErrorBoundaryProps, State> {
+  constructor(props: FeatureErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
@@ -23,10 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Dynamic import to avoid circular dependencies
-    import('@/utils/logger').then(({ logger }) => {
-      logger.error('ErrorBoundary caught an error:', error, errorInfo);
-    });
+    logger.error(`Error in ${this.props.featureName}:`, error, errorInfo);
   }
 
   handleReset = () => {
@@ -40,18 +38,20 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="error-boundary">
-          <Alert variant="error" title="Something went wrong">
+        <div className="feature-error-boundary">
+          <Alert variant="error" title={`Error in ${this.props.featureName}`}>
             <p>
-              An unexpected error occurred. Please try refreshing the page or contact support if the
-              problem persists.
+              An error occurred in {this.props.featureName}. Please try refreshing this section or
+              contact support if the problem persists.
             </p>
             {import.meta.env.DEV && this.state.error && (
-              <pre className="error-boundary__details">{this.state.error.message}</pre>
+              <pre className="feature-error-boundary__details">
+                {this.state.error.message}
+              </pre>
             )}
           </Alert>
           <Button onClick={this.handleReset} variant="outline">
-            Try again
+            Try Again
           </Button>
         </div>
       );
@@ -60,3 +60,4 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+

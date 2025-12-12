@@ -48,15 +48,6 @@ export function StoryPicker({ onSelect, selectedId }: StoryPickerProps) {
 
   return (
     <div className="story-picker">
-      <div className="story-picker__header">
-        <div>
-          <h2 className="story-picker__title">Select a Story to Register</h2>
-          <p className="story-picker__description">
-            Choose from your completed stories ready for on-chain registration
-          </p>
-        </div>
-      </div>
-
       <div className="story-picker__filters">
         <Input
           placeholder="Search stories..."

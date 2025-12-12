@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { Button, Avatar, ThemeToggle } from '@/components';
+import { NotificationBell } from '@/features/Notifications';
 
 export function Layout() {
   const { user, logout, isLoggingOut } = useAuth();
@@ -9,6 +10,8 @@ export function Layout() {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/stories', label: 'Stories' },
+    { path: '/open-roles', label: 'Open Roles' },
+    { path: '/role-requests', label: 'Role Requests' },
     { path: '/register', label: 'Register' },
     { path: '/audit', label: 'Audit Trail' },
   ];
@@ -37,6 +40,7 @@ export function Layout() {
             <ThemeToggle />
             {user && (
               <>
+                <NotificationBell />
                 <Avatar name={user.name} size="sm" />
                 <span className="header__user-name">{user.name}</span>
                 <Button variant="ghost" size="sm" onClick={logout} loading={isLoggingOut}>

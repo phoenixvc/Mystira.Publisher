@@ -1,8 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { storiesApi } from '@/api';
-import { Button, Card, CardBody, CardHeader, Badge, Spinner, Alert } from '@/components';
-import { ContributorList, ApprovalPanel } from '@/features/Contributor';
+import { Button, Card, CardBody, CardHeader, Badge, Spinner, Alert, FeatureErrorBoundary } from '@/components';
+import {
+  ContributorList,
+  ApprovalPanel,
+  OpenRoleManager,
+  RoleRequestList,
+} from '@/features/Contributor';
 import { AuditLogList, useAuditLogs } from '@/features/AuditTrail';
 import { useAuth } from '@/hooks';
 
@@ -104,6 +109,24 @@ export function StoryDetailPage() {
               />
             </CardBody>
           </Card>
+
+          {user && (
+            <>
+              <FeatureErrorBoundary featureName="Open Roles">
+                <OpenRoleManager storyId={story.id} storyTitle={story.title} />
+              </FeatureErrorBoundary>
+              <Card>
+                <CardHeader>
+                  <h2>Role Requests</h2>
+                </CardHeader>
+                <CardBody>
+                  <FeatureErrorBoundary featureName="Role Requests">
+                    <RoleRequestList storyId={story.id} />
+                  </FeatureErrorBoundary>
+                </CardBody>
+              </Card>
+            </>
+          )}
 
           {user && story.status === 'pending_approval' && (
             <ApprovalPanel story={story} currentUserId={user.id} />

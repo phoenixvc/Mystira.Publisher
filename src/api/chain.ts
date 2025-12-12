@@ -1,6 +1,8 @@
 // gRPC client for Mystira.Chain blockchain interactions
 
-const GRPC_ENDPOINT = import.meta.env.VITE_GRPC_ENDPOINT || 'http://localhost:9090';
+import { env } from '@/config/env';
+
+const GRPC_ENDPOINT = env.grpcEndpoint;
 
 export interface RegistrationRequest {
   storyId: string;
@@ -40,7 +42,8 @@ export interface RegistrationStatus {
 export const chainApi = {
   // Register story on-chain
   registerStory: async (data: RegistrationRequest): Promise<RegistrationResponse> => {
-    const response = await fetch(`${GRPC_ENDPOINT}/chain/register`, {
+    const endpoint = GRPC_ENDPOINT.startsWith('http') ? GRPC_ENDPOINT : `https://${GRPC_ENDPOINT}`;
+    const response = await fetch(`${endpoint}/chain/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +62,8 @@ export const chainApi = {
 
   // Check registration status
   getRegistrationStatus: async (transactionId: string): Promise<RegistrationStatus> => {
-    const response = await fetch(`${GRPC_ENDPOINT}/chain/status/${transactionId}`, {
+    const endpoint = GRPC_ENDPOINT.startsWith('http') ? GRPC_ENDPOINT : `https://${GRPC_ENDPOINT}`;
+    const response = await fetch(`${endpoint}/chain/status/${transactionId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -74,7 +78,8 @@ export const chainApi = {
 
   // Get on-chain record for a story
   getOnChainRecord: async (storyId: string): Promise<RegistrationResponse | null> => {
-    const response = await fetch(`${GRPC_ENDPOINT}/chain/record/${storyId}`, {
+    const endpoint = GRPC_ENDPOINT.startsWith('http') ? GRPC_ENDPOINT : `https://${GRPC_ENDPOINT}`;
+    const response = await fetch(`${endpoint}/chain/record/${storyId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },

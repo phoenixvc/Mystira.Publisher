@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { auditApi } from '@/api';
 import type { AuditLogParams } from '@/api/types';
+import { logger } from '@/utils/logger';
 
 export function useAuditLogs(storyId?: string) {
   const [filters, setFilters] = useState<AuditLogParams>({});
@@ -28,7 +29,7 @@ export function useAuditLogs(storyId?: string) {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (err) {
-      console.error('Failed to export audit logs:', err);
+      logger.error('Failed to export audit logs:', err);
     }
   };
 

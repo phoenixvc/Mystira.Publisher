@@ -1,12 +1,20 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import type { ApiError, ApiResponse } from './types';
+import { env } from '@/config/env';
+import { authApi } from './auth';
+import { logger } from '@/utils/logger';
+import { API_TIMEOUT } from '@/constants';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+// API base URL from environment config
+const API_BASE_URL = env.apiBaseUrl;
+
+// Admin API URL - for admin-specific endpoints
+export const ADMIN_API_BASE_URL = env.adminApiBaseUrl;
 
 // Create axios instance with default config
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000,
+  timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -24,15 +32,48 @@ apiClient.interceptors.request.use(
   error => Promise.reject(error)
 );
 
-// Response interceptor for handling errors
+// Response interceptor for handling errors and token refresh
 apiClient.interceptors.response.use(
   response => response,
   async (error: AxiosError<ApiResponse<unknown>>) => {
-    if (error.response?.status === 401) {
-      // Handle token refresh or redirect to login
-      localStorage.removeItem('accessToken');
-      window.location.href = '/login';
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (refreshToken) {
+          logger.debug('Attempting to refresh access token');
+          const response = await authApi.refreshToken({ refreshToken });
+          
+          // Update stored tokens
+          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('refreshToken', response.refreshToken);
+          
+          // Retry original request with new token
+          originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
+          return apiClient(originalRequest);
+        }
+      } catch (refreshError) {
+        logger.error('Token refresh failed:', refreshError);
+        // Refresh failed, logout user
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
     }
+
+    // Log other errors in development
+    if (import.meta.env.DEV && error.response) {
+      logger.error('API Error:', {
+        status: error.response.status,
+        data: error.response.data,
+        url: originalRequest?.url,
+      });
+    }
+
     return Promise.reject(error);
   }
 );

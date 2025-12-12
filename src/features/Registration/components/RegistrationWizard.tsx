@@ -87,8 +87,6 @@ export function RegistrationWizard() {
         <CardBody>
           {currentStep === 'select' && (
             <div className="registration-wizard__section">
-              <h2>Select a Story to Register</h2>
-              <p>Choose from your completed stories ready for on-chain registration.</p>
               <StoryPicker onSelect={handleStorySelect} selectedId={selectedStory?.id} />
             </div>
           )}

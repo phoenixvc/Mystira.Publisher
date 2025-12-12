@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { contributorsApi } from '@/api';
 import type { Attribution } from '@/api/types';
@@ -16,7 +16,7 @@ export function RoyaltySplitEditor({ storyId }: RoyaltySplitEditorProps) {
   const [isDirty, setIsDirty] = useState(false);
 
   // Initialize splits from contributors
-  useMemo(() => {
+  useEffect(() => {
     if (contributors && !isDirty) {
       const initialSplits: Record<string, number> = {};
       contributors.forEach(c => {

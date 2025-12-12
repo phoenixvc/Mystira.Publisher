@@ -6,11 +6,14 @@ import { App } from './App';
 import '@/styles/index.css';
 
 // Initialize React Query client
+import { QUERY_STALE_TIME, QUERY_GC_TIME, QUERY_RETRY } from '@/constants';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
+      staleTime: QUERY_STALE_TIME,
+      gcTime: QUERY_GC_TIME,
+      retry: QUERY_RETRY,
       refetchOnWindowFocus: false,
     },
   },

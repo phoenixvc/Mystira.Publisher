@@ -17,8 +17,8 @@
 
 :root.dark .theme-toggle {
   background: var(--color-bg-secondary);
-  border-color: rgba(99, 102, 241, 0.3);
-  color: var(--color-neutral-300);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: var(--color-primary-300);
 }
 
 .theme-toggle:hover {
@@ -29,9 +29,10 @@
 }
 
 :root.dark .theme-toggle:hover {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--color-primary-400);
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--color-primary-300);
   border-color: var(--color-primary-500);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
 }
 
 .theme-toggle:active {

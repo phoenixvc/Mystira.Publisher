@@ -5,6 +5,8 @@ import type {
   LoginResponse,
   RefreshTokenRequest,
 } from './types';
+import { env } from '@/config/env';
+import { logger } from '@/utils/logger';
 
 const AUTH_PATH = '/auth';
 
@@ -12,7 +14,7 @@ export const authApi = {
   // Login with credentials (with fake login fallback for development)
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     // Fake login for development - accept any credentials
-    const useFakeLogin = import.meta.env.DEV || import.meta.env.VITE_USE_FAKE_AUTH === 'true';
+    const useFakeLogin = env.useFakeAuth;
     
     if (useFakeLogin) {
       // Create fake user from email
@@ -52,7 +54,7 @@ export const authApi = {
 
   // Logout
   logout: async (): Promise<void> => {
-    const useFakeLogin = import.meta.env.DEV || import.meta.env.VITE_USE_FAKE_AUTH === 'true';
+    const useFakeLogin = env.useFakeAuth;
     
     if (useFakeLogin) {
       // Just clear local storage for fake login
@@ -74,18 +76,42 @@ export const authApi = {
 
   // Refresh access token
   refreshToken: async (data: RefreshTokenRequest): Promise<LoginResponse> => {
+    // Handle fake auth in development
+    if (env.useFakeAuth) {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken?.startsWith('fake-refresh-token')) {
+        // Return new fake tokens
+        const fakeResponse: LoginResponse = {
+          user: {
+            id: 'fake-user-refreshed',
+            name: 'Demo User',
+            email: 'demo@example.com',
+            roles: ['author'] as const,
+            createdAt: new Date().toISOString(),
+          },
+          accessToken: 'fake-access-token-' + Date.now(),
+          refreshToken: 'fake-refresh-token-' + Date.now(),
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        };
+        localStorage.setItem('accessToken', fakeResponse.accessToken);
+        localStorage.setItem('refreshToken', fakeResponse.refreshToken);
+        return fakeResponse;
+      }
+    }
+
     const response = await apiClient.post<{ data: LoginResponse }>(
       `${AUTH_PATH}/refresh`,
       data
     );
     localStorage.setItem('accessToken', response.data.data.accessToken);
     localStorage.setItem('refreshToken', response.data.data.refreshToken);
+    logger.debug('Token refreshed successfully');
     return response.data.data;
   },
 
   // Get current user (with fake user fallback)
   getCurrentUser: async (): Promise<User> => {
-    const useFakeLogin = import.meta.env.DEV || import.meta.env.VITE_USE_FAKE_AUTH === 'true';
+    const useFakeLogin = env.useFakeAuth;
     const accessToken = localStorage.getItem('accessToken');
     
     if (useFakeLogin && accessToken?.startsWith('fake-access-token')) {
