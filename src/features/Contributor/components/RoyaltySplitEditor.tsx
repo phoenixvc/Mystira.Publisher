@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { contributorsApi } from '@/api';
 import type { Attribution } from '@/api/types';
@@ -26,8 +26,11 @@ export function RoyaltySplitEditor({ storyId }: RoyaltySplitEditorProps) {
     }
   }, [contributors, isDirty]);
 
-  const totalSplit = Object.values(splits).reduce((sum, val) => sum + val, 0);
-  const isValid = totalSplit === 100;
+  const totalSplit = useMemo(
+    () => Object.values(splits).reduce((sum, val) => sum + val, 0),
+    [splits]
+  );
+  const isValid = useMemo(() => totalSplit === 100, [totalSplit]);
 
   const updateMutation = useMutation({
     mutationFn: async () => {
@@ -42,12 +45,12 @@ export function RoyaltySplitEditor({ storyId }: RoyaltySplitEditorProps) {
     },
   });
 
-  const handleSplitChange = (contributorId: string, value: number) => {
+  const handleSplitChange = useCallback((contributorId: string, value: number) => {
     setSplits(prev => ({ ...prev, [contributorId]: value }));
     setIsDirty(true);
-  };
+  }, []);
 
-  const distributeEvenly = () => {
+  const distributeEvenly = useCallback(() => {
     if (!contributors) return;
     const evenSplit = Math.floor(100 / contributors.length);
     const remainder = 100 - evenSplit * contributors.length;
@@ -58,7 +61,7 @@ export function RoyaltySplitEditor({ storyId }: RoyaltySplitEditorProps) {
     });
     setSplits(newSplits);
     setIsDirty(true);
-  };
+  }, [contributors]);
 
   if (isLoading) {
     return <div>Loading contributors...</div>;

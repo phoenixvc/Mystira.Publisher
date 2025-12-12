@@ -17,3 +17,5 @@ export { ToastContainer } from './ToastContainer';
 export type { ToastVariant, ToastProps } from './Toast';
 export { Skeleton } from './Skeleton';
 export { SkeletonLoader } from './SkeletonLoader';
+export { FocusTrap } from './FocusTrap';
+export { SkipLink } from './SkipLink';

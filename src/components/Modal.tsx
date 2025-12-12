@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import clsx from 'clsx';
+import { FocusTrap } from './FocusTrap';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -57,24 +58,26 @@ export function Modal({
       onClick={handleOverlayClick}
       aria-labelledby={title ? 'modal-title' : undefined}
     >
-      <div className="modal__content">
-        {title && (
-          <div className="modal__header">
-            <h2 id="modal-title" className="modal__title">
-              {title}
-            </h2>
-            <button
-              type="button"
-              className="modal__close"
-              onClick={onClose}
-              aria-label="Close modal"
-            >
-              ×
-            </button>
-          </div>
-        )}
-        <div className="modal__body">{children}</div>
-      </div>
+      <FocusTrap active={isOpen}>
+        <div className="modal__content">
+          {title && (
+            <div className="modal__header">
+              <h2 id="modal-title" className="modal__title">
+                {title}
+              </h2>
+              <button
+                type="button"
+                className="modal__close"
+                onClick={onClose}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
+            </div>
+          )}
+          <div className="modal__body">{children}</div>
+        </div>
+      </FocusTrap>
     </dialog>
   );
 }

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { Attribution } from '@/api/types';
 import { Avatar, Badge, Button, Spinner, EmptyState } from '@/components';
 
@@ -7,7 +8,11 @@ interface ContributorListProps {
   onRemove?: (id: string) => void;
 }
 
-export function ContributorList({ contributors, isLoading, onRemove }: ContributorListProps) {
+export const ContributorList = memo(function ContributorList({
+  contributors,
+  isLoading,
+  onRemove,
+}: ContributorListProps) {
   if (isLoading) {
     return (
       <div className="contributor-list__loading">
@@ -57,7 +62,7 @@ export function ContributorList({ contributors, isLoading, onRemove }: Contribut
       ))}
     </ul>
   );
-}
+});
 
 function formatRole(role: string): string {
   return role

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { AuditLog } from '@/api/types';
 import { Badge, Spinner, EmptyState } from '@/components';
 
@@ -7,7 +8,11 @@ interface AuditLogListProps {
   onSelect?: (log: AuditLog) => void;
 }
 
-export function AuditLogList({ logs, isLoading, onSelect }: AuditLogListProps) {
+export const AuditLogList = memo(function AuditLogList({
+  logs,
+  isLoading,
+  onSelect,
+}: AuditLogListProps) {
   if (isLoading) {
     return (
       <div className="audit-log-list__loading">
@@ -67,7 +72,7 @@ export function AuditLogList({ logs, isLoading, onSelect }: AuditLogListProps) {
       ))}
     </ul>
   );
-}
+});
 
 function formatEventType(eventType: string): string {
   return eventType

@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { Button, Avatar, ThemeToggle } from '@/components';
+import { Button, Avatar, ThemeToggle, SkipLink } from '@/components';
 import { NotificationBell } from '@/features/Notifications';
 
 export function Layout() {
@@ -18,6 +18,7 @@ export function Layout() {
 
   return (
     <div className="app">
+      <SkipLink />
       <header className="app__header">
         <div className="header">
           <Link to="/dashboard" className="header__logo">
@@ -67,9 +68,9 @@ export function Layout() {
           </nav>
         </aside>
 
-        <div className="app__content">
+        <main id="main-content" className="app__content">
           <Outlet />
-        </div>
+        </main>
       </main>
     </div>
   );
