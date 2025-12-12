@@ -38,23 +38,32 @@ apiClient.interceptors.response.use(
   async (error: AxiosError<ApiResponse<unknown>>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    // Prevent infinite loop - don't refresh if already on refresh endpoint
+    const isRefreshEndpoint = originalRequest?.url?.includes('/auth/refresh');
+    
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !isRefreshEndpoint) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
-          logger.debug('Attempting to refresh access token');
-          const response = await authApi.refreshToken({ refreshToken });
-          
-          // Update stored tokens
-          localStorage.setItem('accessToken', response.accessToken);
-          localStorage.setItem('refreshToken', response.refreshToken);
-          
-          // Retry original request with new token
-          originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
-          return apiClient(originalRequest);
+        if (!refreshToken) {
+          // No refresh token, logout user
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          window.location.href = '/login';
+          return Promise.reject(error);
         }
+
+        logger.debug('Attempting to refresh access token');
+        const response = await authApi.refreshToken({ refreshToken });
+        
+        // Update stored tokens
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        
+        // Retry original request with new token
+        originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
+        return apiClient(originalRequest);
       } catch (refreshError) {
         logger.error('Token refresh failed:', refreshError);
         // Refresh failed, logout user

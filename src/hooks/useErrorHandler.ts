@@ -81,10 +81,20 @@ export function useErrorHandler() {
 
   const handleNetworkError = useCallback(
     (error: unknown) => {
+      // Detect network errors
+      const isNetworkError =
+        (error instanceof Error &&
+          (error.message.includes('Network Error') ||
+            error.message.includes('timeout') ||
+            error.message.includes('Failed to fetch'))) ||
+        (typeof navigator !== 'undefined' && !navigator.onLine);
+
       return handleError(error, {
         showToast: true,
         logError: true,
-        fallbackMessage: 'Network error. Please check your connection and try again.',
+        fallbackMessage: isNetworkError
+          ? 'Network error. Please check your connection and try again.'
+          : 'An error occurred while processing your request.',
       });
     },
     [handleError]

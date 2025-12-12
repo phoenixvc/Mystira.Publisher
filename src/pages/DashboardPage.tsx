@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { storiesApi } from '@/api';
-import { Button, Card, CardBody, CardHeader, Badge, Spinner, EmptyState } from '@/components';
+import { Button, Card, CardBody, CardHeader, Badge, Spinner, EmptyState, SkeletonLoader } from '@/components';
 import { useAuth } from '@/hooks';
 
 export function DashboardPage() {
@@ -79,9 +79,7 @@ export function DashboardPage() {
           </CardHeader>
           <CardBody>
             {isLoading ? (
-              <div className="dashboard-loading">
-                <Spinner size="lg" />
-              </div>
+              <SkeletonLoader type="list" count={5} />
             ) : stories?.items.length === 0 ? (
               <EmptyState
                 title="No stories yet"

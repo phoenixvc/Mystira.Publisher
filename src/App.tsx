@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { ErrorBoundary, Spinner } from '@/components';
+import { ErrorBoundary, Spinner, ToastContainer } from '@/components';
+import { useUIStore } from '@/state/uiStore';
 import { Layout } from './Layout';
 import { ProtectedRoute } from './ProtectedRoute';
 
@@ -26,6 +27,7 @@ function AppContent() {
     variant: n.type as 'success' | 'error' | 'warning' | 'info',
     title: n.title,
     message: n.message,
+    duration: n.duration,
   }));
 
   return (

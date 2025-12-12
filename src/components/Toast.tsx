@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Alert } from './Alert';
 import { Button } from './Button';
 import clsx from 'clsx';
-import { logger } from '@/utils/logger';
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
 

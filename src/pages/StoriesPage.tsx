@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { storiesApi } from '@/api';
 import type { StoryStatus } from '@/api/types';
-import { Button, Card, CardBody, Input, Select, Badge, Spinner, EmptyState } from '@/components';
+import { Button, Card, CardBody, Input, Select, Badge, Spinner, EmptyState, SkeletonLoader } from '@/components';
 import { useDebounce } from '@/hooks';
 
 const STATUS_OPTIONS = [
@@ -52,9 +52,7 @@ export function StoriesPage() {
       </div>
 
       {isLoading ? (
-        <div className="stories-loading">
-          <Spinner size="lg" />
-        </div>
+        <SkeletonLoader type="card" count={6} />
       ) : data?.items.length === 0 ? (
         <EmptyState
           title="No stories found"

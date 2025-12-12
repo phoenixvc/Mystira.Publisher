@@ -16,6 +16,7 @@ export function useToast() {
         type: options?.variant || 'info',
         title,
         message,
+        duration: options?.duration,
       });
     },
     [addNotification]

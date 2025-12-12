@@ -25,8 +25,8 @@ export function StoryDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="page page--loading">
-        <Spinner size="lg" />
+      <div className="page page--story-detail">
+        <SkeletonLoader type="form" />
       </div>
     );
   }

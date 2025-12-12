@@ -6,6 +6,7 @@ interface Notification {
   type: 'success' | 'error' | 'warning' | 'info';
   title: string;
   message?: string;
+  duration?: number;
 }
 
 export type Theme = 'light' | 'dark' | 'system';
