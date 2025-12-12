@@ -9,8 +9,36 @@ import type {
 const AUTH_PATH = '/auth';
 
 export const authApi = {
-  // Login with credentials
+  // Login with credentials (with fake login fallback for development)
   login: async (data: LoginRequest): Promise<LoginResponse> => {
+    // Fake login for development - accept any credentials
+    const useFakeLogin = import.meta.env.DEV || import.meta.env.VITE_USE_FAKE_AUTH === 'true';
+    
+    if (useFakeLogin) {
+      // Create fake user from email
+      const fakeUser: LoginResponse = {
+        user: {
+          id: 'fake-user-' + Date.now(),
+          name: data.email.split('@')[0] || 'User',
+          email: data.email,
+          roles: ['author'] as const,
+          createdAt: new Date().toISOString(),
+        },
+        accessToken: 'fake-access-token-' + Date.now(),
+        refreshToken: 'fake-refresh-token-' + Date.now(),
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      };
+      
+      // Store fake tokens
+      localStorage.setItem('accessToken', fakeUser.accessToken);
+      localStorage.setItem('refreshToken', fakeUser.refreshToken);
+      
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      return fakeUser;
+    }
+    
     const response = await request<LoginResponse>({
       method: 'POST',
       url: `${AUTH_PATH}/login`,
@@ -24,6 +52,15 @@ export const authApi = {
 
   // Logout
   logout: async (): Promise<void> => {
+    const useFakeLogin = import.meta.env.DEV || import.meta.env.VITE_USE_FAKE_AUTH === 'true';
+    
+    if (useFakeLogin) {
+      // Just clear local storage for fake login
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      return;
+    }
+    
     try {
       await request<void>({
         method: 'POST',
@@ -46,10 +83,38 @@ export const authApi = {
     return response.data.data;
   },
 
-  // Get current user
-  getCurrentUser: (): Promise<User> =>
-    request<User>({
+  // Get current user (with fake user fallback)
+  getCurrentUser: async (): Promise<User> => {
+    const useFakeLogin = import.meta.env.DEV || import.meta.env.VITE_USE_FAKE_AUTH === 'true';
+    const accessToken = localStorage.getItem('accessToken');
+    
+    if (useFakeLogin && accessToken?.startsWith('fake-access-token')) {
+      // Return fake user from stored data
+      const storedUser = localStorage.getItem('auth-storage');
+      if (storedUser) {
+        try {
+          const parsed = JSON.parse(storedUser);
+          if (parsed.state?.user) {
+            return parsed.state.user;
+          }
+        } catch {
+          // Fall through to create new fake user
+        }
+      }
+      
+      // Create default fake user
+      return {
+        id: 'fake-user-default',
+        name: 'Demo User',
+        email: 'demo@example.com',
+        roles: ['author'] as const,
+        createdAt: new Date().toISOString(),
+      };
+    }
+    
+    return request<User>({
       method: 'GET',
       url: `${AUTH_PATH}/me`,
-    }),
+    });
+  },
 };

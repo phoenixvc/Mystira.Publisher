@@ -4,6 +4,9 @@ body {
   font-size: var(--font-size-base);
   color: var(--color-text);
   background-color: var(--color-bg);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -15,16 +18,19 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: var(--font-size-3xl);
   margin-bottom: var(--spacing-4);
+  letter-spacing: -0.02em;
 }
 
 h2 {
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-3);
+  letter-spacing: -0.01em;
 }
 
 h3 {
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-2);
+  letter-spacing: -0.01em;
 }
 
 h4 {
@@ -44,6 +50,12 @@ a {
 
 a:hover {
   color: var(--color-primary-700);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 code {

@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks';
-import { Button, Avatar } from '@/components';
+import { Button, Avatar, ThemeToggle } from '@/components';
 
 export function Layout() {
   const { user, logout, isLoggingOut } = useAuth();
@@ -26,7 +26,7 @@ export function Layout() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`header__link ${location.pathname === item.path ? 'header__link--active' : ''}`}
+                className={`header__link ${location.pathname.startsWith(item.path) ? 'header__link--active' : ''}`}
               >
                 {item.label}
               </Link>
@@ -34,6 +34,7 @@ export function Layout() {
           </nav>
 
           <div className="header__user">
+            <ThemeToggle />
             {user && (
               <>
                 <Avatar name={user.name} size="sm" />

@@ -100,22 +100,66 @@
   --header-height: 64px;
 }
 
-/* Dark mode variables */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: var(--color-neutral-900);
-    --color-bg-secondary: var(--color-neutral-800);
-    --color-text: var(--color-neutral-100);
-    --color-text-secondary: var(--color-neutral-400);
-    --color-border: var(--color-neutral-700);
-  }
-}
-
 /* Light mode (default) */
-:root {
+:root,
+:root.light {
   --color-bg: #ffffff;
   --color-bg-secondary: var(--color-neutral-50);
   --color-text: var(--color-neutral-900);
   --color-text-secondary: var(--color-neutral-600);
   --color-border: var(--color-neutral-200);
+  
+  /* Semantic colors for light mode */
+  --color-success-light: #d1fae5;
+  --color-warning-light: #fef3c7;
+  --color-danger-light: #fee2e2;
+  --color-info-light: #dbeafe;
+  
+  /* Shadows for light mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Dark mode */
+:root.dark {
+  --color-bg: #0f0f11;
+  --color-bg-secondary: #1a1a1d;
+  --color-text: #f4f4f5;
+  --color-text-secondary: #a1a1aa;
+  --color-border: #27272a;
+  
+  /* Semantic colors for dark mode */
+  --color-success-light: rgba(16, 185, 129, 0.2);
+  --color-warning-light: rgba(245, 158, 11, 0.2);
+  --color-danger-light: rgba(239, 68, 68, 0.2);
+  --color-info-light: rgba(59, 130, 246, 0.2);
+  
+  /* Shadows for dark mode (lighter, more subtle) */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.6), 0 2px 4px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.7), 0 8px 10px -6px rgb(0 0 0 / 0.6);
+}
+
+/* System preference fallback */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    --color-bg: var(--color-neutral-900);
+    --color-bg-secondary: var(--color-neutral-800);
+    --color-text: var(--color-neutral-100);
+    --color-text-secondary: var(--color-neutral-400);
+    --color-border: var(--color-neutral-700);
+    
+    --color-success-light: rgba(16, 185, 129, 0.15);
+    --color-warning-light: rgba(245, 158, 11, 0.15);
+    --color-danger-light: rgba(239, 68, 68, 0.15);
+    --color-info-light: rgba(59, 130, 246, 0.15);
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  }
 }
