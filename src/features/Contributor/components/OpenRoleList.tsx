@@ -1,5 +1,5 @@
-import { Badge, Spinner, EmptyState } from '@/components';
 import type { OpenRole } from '@/api/types';
+import { Badge, EmptyState, Spinner } from '@/components';
 import { formatDate } from '@/utils/format';
 
 interface OpenRoleListProps {
@@ -25,7 +25,7 @@ export function OpenRoleList({ roles, isLoading, onEdit, onDelete }: OpenRoleLis
     return (
       <EmptyState
         title="No open roles"
-        message="Create an open role to allow contributors to apply for this story."
+        description="Create an open role to allow contributors to apply for this story."
       />
     );
   }
@@ -39,9 +39,7 @@ export function OpenRoleList({ roles, isLoading, onEdit, onDelete }: OpenRoleLis
               <h4>{formatRole(role.role)}</h4>
               <Badge variant="info">{role.splitPercentage}% split</Badge>
             </div>
-            {role.description && (
-              <p className="open-role-list__description">{role.description}</p>
-            )}
+            {role.description && <p className="open-role-list__description">{role.description}</p>}
             {role.requirements && (
               <div className="open-role-list__requirements">
                 <strong>Requirements:</strong> {role.requirements}
@@ -83,4 +81,3 @@ export function OpenRoleList({ roles, isLoading, onEdit, onDelete }: OpenRoleLis
     </div>
   );
 }
-

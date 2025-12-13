@@ -2,25 +2,28 @@ import { useMutation, UseMutationOptions, UseMutationResult } from '@tanstack/re
 import { useErrorHandler } from './useErrorHandler';
 import { useToast } from './useToast';
 
-interface MutationWithErrorHandlingOptions<TData, TError, TVariables, TContext>
-  extends Omit<UseMutationOptions<TData, TError, TVariables, TContext>, 'onError'> {
+interface MutationWithErrorHandlingOptions<TData, TError, TVariables, TContext> extends Omit<
+  UseMutationOptions<TData, TError, TVariables, TContext>,
+  'onError' | 'onSuccess'
+> {
   successMessage?: string;
   errorContext?: string;
   onError?: (error: TError, variables: TVariables, context: TContext | undefined) => void;
+  onSuccess?: (data: TData, variables: TVariables, context: TContext | undefined) => void;
 }
 
 export function useMutationWithErrorHandling<
   TData = unknown,
   TError = unknown,
   TVariables = void,
-  TContext = unknown
+  TContext = unknown,
 >(
   options: MutationWithErrorHandlingOptions<TData, TError, TVariables, TContext>
 ): UseMutationResult<TData, TError, TVariables, TContext> {
   const { handleApiError } = useErrorHandler();
   const { success } = useToast();
 
-  const { successMessage, errorContext, onError, ...mutationOptions } = options;
+  const { successMessage, errorContext, onError, onSuccess, ...mutationOptions } = options;
 
   return useMutation({
     ...mutationOptions,
@@ -28,13 +31,11 @@ export function useMutationWithErrorHandling<
       if (successMessage) {
         success(successMessage);
       }
-      mutationOptions.onSuccess?.(data, variables, context);
+      onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
       handleApiError(error, errorContext);
       onError?.(error, variables, context);
-      mutationOptions.onError?.(error, variables, context);
     },
   });
 }
-

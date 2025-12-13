@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { Button, Badge, Card, CardBody, CardHeader, Spinner, EmptyState, Modal } from '@/components';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { notificationsApi } from '@/api';
 import type { Notification } from '@/api/types';
-import { formatDate } from '@/utils/format';
-import { useNavigate } from 'react-router-dom';
+import { Badge, Button, EmptyState, Modal, Spinner } from '@/components';
 import { NOTIFICATION_POLL_INTERVAL } from '@/constants';
+import { formatDate } from '@/utils/format';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 interface NotificationCenterProps {
   isOpen: boolean;
@@ -105,7 +104,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
         {isLoading ? (
           <Spinner />
         ) : notifications.length === 0 ? (
-          <EmptyState title="No notifications" message="You're all caught up!" />
+          <EmptyState title="No notifications" description="You're all caught up!" />
         ) : (
           <div className="notification-center__list">
             {notifications.map(notification => (
@@ -149,4 +148,3 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
     </Modal>
   );
 }
-

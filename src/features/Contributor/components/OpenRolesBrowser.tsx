@@ -1,5 +1,16 @@
 import { useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Badge, Select, Spinner, EmptyState, Modal, Input } from '@/components';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Badge,
+  Select,
+  Spinner,
+  EmptyState,
+  Modal,
+  Input,
+} from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { roleRequestsApi } from '@/api';
 import type { OpenRole, ContributorRole, SubmitRoleRequestRequest } from '@/api/types';
@@ -79,7 +90,7 @@ export function OpenRolesBrowser() {
     return (
       <EmptyState
         title="Sign in required"
-        message="Please sign in to browse and apply for open roles."
+        description="Please sign in to browse and apply for open roles."
       />
     );
   }
@@ -106,7 +117,7 @@ export function OpenRolesBrowser() {
         ) : openRoles.length === 0 ? (
           <EmptyState
             title="No open roles available"
-            message="Check back later for new opportunities."
+            description="Check back later for new opportunities."
           />
         ) : (
           <div className="open-roles-browser__list">
@@ -222,4 +233,3 @@ export function OpenRolesBrowser() {
     </>
   );
 }
-

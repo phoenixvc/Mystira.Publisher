@@ -1,21 +1,35 @@
-import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { storiesApi } from '@/api';
-import { Button, Card, CardBody, CardHeader, Badge, Spinner, Alert, FeatureErrorBoundary } from '@/components';
 import {
-  ContributorList,
+  Alert,
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  FeatureErrorBoundary,
+  SkeletonLoader,
+  Spinner,
+} from '@/components';
+import { AuditLogList, useAuditLogs } from '@/features/AuditTrail';
+import {
   ApprovalPanel,
+  ContributorList,
   OpenRoleManager,
   RoleRequestList,
 } from '@/features/Contributor';
-import { AuditLogList, useAuditLogs } from '@/features/AuditTrail';
 import { useAuth } from '@/hooks';
+import { useQuery } from '@tanstack/react-query';
+import { Link, useParams } from 'react-router-dom';
 
 export function StoryDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
 
-  const { data: story, isLoading, error } = useQuery({
+  const {
+    data: story,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['story', id],
     queryFn: () => storiesApi.get(id!),
     enabled: !!id,
@@ -48,7 +62,9 @@ export function StoryDetailPage() {
     <div className="page page--story-detail">
       <header className="story-detail__header">
         <div>
-          <Link to="/stories" className="story-detail__back">Back to Stories</Link>
+          <Link to="/stories" className="story-detail__back">
+            Back to Stories
+          </Link>
           <h1>{story.title}</h1>
           <Badge variant={getStatusVariant(story.status)} size="md">
             {story.status}
@@ -83,7 +99,9 @@ export function StoryDetailPage() {
                 {story.transactionId && (
                   <>
                     <dt>Transaction ID</dt>
-                    <dd><code>{story.transactionId}</code></dd>
+                    <dd>
+                      <code>{story.transactionId}</code>
+                    </dd>
                   </>
                 )}
               </dl>
@@ -139,11 +157,7 @@ export function StoryDetailPage() {
               <h2>Activity</h2>
             </CardHeader>
             <CardBody>
-              {isLoadingLogs ? (
-                <Spinner />
-              ) : (
-                <AuditLogList logs={auditLogs.slice(0, 10)} />
-              )}
+              {isLoadingLogs ? <Spinner /> : <AuditLogList logs={auditLogs.slice(0, 10)} />}
             </CardBody>
           </Card>
         </aside>

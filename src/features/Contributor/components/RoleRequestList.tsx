@@ -1,9 +1,18 @@
-import { useState } from 'react';
-import { Badge, Button, Card, CardBody, CardHeader, Modal, Spinner, EmptyState } from '@/components';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { roleRequestsApi } from '@/api';
 import type { RoleRequest, RoleRequestStatus } from '@/api/types';
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+  Modal,
+  Spinner,
+} from '@/components';
 import { formatDate } from '@/utils/format';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
 interface RoleRequestListProps {
   storyId?: string;
@@ -17,7 +26,9 @@ function formatRole(role: string): string {
     .join(' ');
 }
 
-function getStatusBadgeVariant(status: RoleRequestStatus): 'info' | 'success' | 'danger' | 'warning' {
+function getStatusBadgeVariant(
+  status: RoleRequestStatus
+): 'info' | 'success' | 'danger' | 'warning' {
   switch (status) {
     case 'pending':
       return 'info';
@@ -49,7 +60,7 @@ export function RoleRequestList({ storyId, openRoleId }: RoleRequestListProps) {
         return await roleRequestsApi.getRoleRequestsByStory(storyId);
       }
       const result = await roleRequestsApi.getRoleRequests();
-      return Array.isArray(result) ? result : result?.items ?? [];
+      return Array.isArray(result) ? result : (result?.items ?? []);
     },
   });
 
@@ -93,7 +104,7 @@ export function RoleRequestList({ storyId, openRoleId }: RoleRequestListProps) {
     return (
       <EmptyState
         title="No role requests"
-        message="No contributors have applied for roles yet."
+        description="No contributors have applied for roles yet."
       />
     );
   }
@@ -109,9 +120,7 @@ export function RoleRequestList({ storyId, openRoleId }: RoleRequestListProps) {
                   <h4>{request.userName}</h4>
                   <p className="role-request-list__email">{request.userEmail}</p>
                 </div>
-                <Badge variant={getStatusBadgeVariant(request.status)}>
-                  {request.status}
-                </Badge>
+                <Badge variant={getStatusBadgeVariant(request.status)}>{request.status}</Badge>
               </div>
             </CardHeader>
             <CardBody>
@@ -215,4 +224,3 @@ export function RoleRequestList({ storyId, openRoleId }: RoleRequestListProps) {
     </>
   );
 }
-
