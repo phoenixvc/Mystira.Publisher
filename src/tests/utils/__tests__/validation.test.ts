@@ -26,7 +26,12 @@ describe('validation utilities', () => {
   describe('isNotEmpty', () => {
     it('returns true for non-empty strings', () => {
       expect(isNotEmpty('hello')).toBe(true);
+      expect(isNotEmpty('world')).toBe(true);
+    });
+
+    it('returns true for strings with whitespace only', () => {
       expect(isNotEmpty(' ')).toBe(true);
+      expect(isNotEmpty('   ')).toBe(true);
     });
 
     it('returns false for empty strings', () => {
