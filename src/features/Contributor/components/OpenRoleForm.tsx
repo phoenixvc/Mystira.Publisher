@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button, Input, Select, Modal } from '@/components';
 import type { OpenRole, CreateOpenRoleRequest, ContributorRole } from '@/api/types';
 

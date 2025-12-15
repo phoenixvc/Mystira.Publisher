@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { storiesApi } from '@/api';
 import type { StoryStatus } from '@/api/types';
-import { Button, Card, CardBody, Input, Select, Badge, Spinner, EmptyState, SkeletonLoader } from '@/components';
+import { Button, Card, CardBody, Input, Select, Badge, EmptyState, SkeletonLoader } from '@/components';
 import { useDebounce } from '@/hooks';
 
 const STATUS_OPTIONS = [

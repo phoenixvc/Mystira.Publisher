@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Badge } from '@/components';
+import { Button, Card, CardBody, CardHeader } from '@/components';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { roleRequestsApi } from '@/api';
-import type { OpenRole, CreateOpenRoleRequest, ContributorRole } from '@/api/types';
+import type { OpenRole } from '@/api/types';
 import { OpenRoleForm } from './OpenRoleForm';
 import { OpenRoleList } from './OpenRoleList';
 
