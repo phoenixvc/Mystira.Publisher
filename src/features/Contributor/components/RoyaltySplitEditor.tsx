@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { contributorsApi } from '@/api';
-import type { Attribution } from '@/api/types';
 import { Button, Alert, Card, CardBody, CardFooter } from '@/components';
 import { useContributors } from '../hooks/useContributors';
 

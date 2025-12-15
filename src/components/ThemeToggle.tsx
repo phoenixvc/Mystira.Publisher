@@ -1,5 +1,4 @@
 import { useUIStore } from '@/state/uiStore';
-import clsx from 'clsx';
 
 export function ThemeToggle() {
   const { effectiveTheme, toggleTheme } = useUIStore();

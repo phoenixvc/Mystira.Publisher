@@ -21,7 +21,7 @@ const EVENT_TYPE_OPTIONS = [
   { value: 'registration_failed', label: 'Registration Failed' },
 ];
 
-export function AuditLogFilters({ filters, onChange, onExport }: AuditLogFiltersProps) {
+export function AuditLogFilters({ filters, onChange, onExport: _onExport }: AuditLogFiltersProps) {
   const handleChange = (key: keyof AuditLogParams, value: string) => {
     onChange({
       ...filters,

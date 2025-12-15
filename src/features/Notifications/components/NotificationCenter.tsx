@@ -39,7 +39,7 @@ export function NotificationCenter({ isOpen, onClose }: NotificationCenterProps)
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: () => notificationsApi.getNotifications({ page: 1, pageSize: 50 }),
     enabled: isOpen,
