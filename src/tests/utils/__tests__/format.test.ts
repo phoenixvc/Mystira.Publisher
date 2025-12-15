@@ -22,7 +22,8 @@ describe('format utilities', () => {
       const date = '2024-01-15T10:30:00Z';
       const formatted = formatDateTime(date);
       expect(formatted).toMatch(/Jan/);
-      expect(formatted).toMatch(/10/);
+      expect(formatted).toMatch(/2024/);
+      expect(formatted).toMatch(/\d{1,2}:\d{2}/); // Matches time format HH:MM
     });
   });
 
