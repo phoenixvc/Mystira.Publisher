@@ -2,7 +2,6 @@
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
 
 class Logger {

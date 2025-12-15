@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { storiesApi } from '@/api';
-import { Button, Card, CardBody, CardHeader, Badge, Spinner, EmptyState, SkeletonLoader } from '@/components';
+import { Button, Card, CardBody, CardHeader, Badge, EmptyState, SkeletonLoader } from '@/components';
 import { useAuth } from '@/hooks';
 
 export function DashboardPage() {
