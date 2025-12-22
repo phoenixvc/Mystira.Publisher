@@ -1,4 +1,4 @@
-name: CI
+name: "Publisher: CI"
 
 on:
   push:
