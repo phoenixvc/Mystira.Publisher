@@ -2,6 +2,7 @@
   "name": "mystira-publisher",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.1",
   "description": "Mystira.Publisher - Story IP Registration Frontend",
   "type": "module",
   "scripts": {
